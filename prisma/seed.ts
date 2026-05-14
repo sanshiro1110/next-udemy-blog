@@ -1,20 +1,20 @@
-import { PrismaClient } from "@prisma/client";
-import * as bcypt from "bcryptjs";
+import { PrismaClient } from "@prisma/client"
+import * as bcypt from "bcryptjs"
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 async function main() {
   // クリーンアップ
-  await prisma.post.deleteMany();
-  await prisma.user.deleteMany();
+  await prisma.post.deleteMany()
+  await prisma.user.deleteMany()
 
-  const hashedPassword = await bcypt.hash("password123", 12);
+  const hashedPassword = await bcypt.hash("tisan7561", 12)
 
   // ダミー画像URL
   const dummyImages = [
     "https://picsum.photos/seed/post1/600/400",
     "https://picsum.photos/seed/post2/600/400",
-  ];
+  ]
 
   const user = await prisma.user.create({
     data: {
@@ -38,16 +38,16 @@ async function main() {
         ],
       },
     },
-  });
+  })
 
-  console.log({ user });
+  console.log({ user })
 }
 
 main()
   .catch((e) => {
-    console.error(e);
-    process.exit(1);
+    console.error(e)
+    process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect();
-  });
+    await prisma.$disconnect()
+  })
