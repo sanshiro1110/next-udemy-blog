@@ -32,4 +32,15 @@ export const { auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = (token.id || token.sub || "") as string
+        console.log(session.user.id)
+        session.user.name = token.name ?? ""
+        session.user.email = token.email ?? ""
+      }
+      return session
+    },
+  },
 })
