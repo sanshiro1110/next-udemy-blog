@@ -1,10 +1,5 @@
 import Link from "next/link"
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu"
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "@/components/ui/navigation-menu"
 import { auth } from "@/auth"
 import Setting from "./Setting"
 
@@ -19,16 +14,11 @@ export default async function PublicHeader() {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link
-                  href="/dashboard"
-                  className="font-bold text-xl"
-                  passHref
-                  legacyBehavior
-                >
-                  <NavigationMenuLink className="font-bold text-xl">
+                <NavigationMenuLink asChild>
+                  <Link href="/dashboard" className="font-bold text-xl">
                     管理ページ
-                  </NavigationMenuLink>
-                </Link>
+                  </Link>
+                </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>

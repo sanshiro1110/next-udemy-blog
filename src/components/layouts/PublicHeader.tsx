@@ -1,12 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import SearchBox from "@/components/post/SearchBox"
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu"
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "@/components/ui/navigation-menu"
 
 export default function PublicHeader() {
   return (
@@ -16,7 +11,7 @@ export default function PublicHeader() {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuLink className="font-bold text-xl">
+                <NavigationMenuLink asChild>
                   <Link href="/dashboard" className="font-bold text-xl">
                     Blog
                   </Link>
