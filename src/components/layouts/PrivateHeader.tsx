@@ -14,11 +14,7 @@ export default async function PublicHeader() {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link href="/dashboard" className="font-bold text-xl">
-                    管理ページ
-                  </Link>
-                </NavigationMenuLink>
+                <NavigationMenuLink render={<Link href="/dashboard" className="font-bold text-xl" />}>管理ページ</NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
