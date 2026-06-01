@@ -53,7 +53,7 @@ export default async function ShowPage({ params }: Params) {
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeHighlight]}
               skipHtml={false} // HTMLスキップを無効化
-              unwrapDisalowed={true} // Markdownの改行を解釈
+              unwrapDisallowed={true} // Markdownの改行を解釈
             >
               {post.content}
             </ReactMarkdown>

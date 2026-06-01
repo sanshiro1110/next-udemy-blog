@@ -1,7 +1,6 @@
 "use client"
 
-import { useState, useActionState } from "react"
-// import createPost from "@/lib/actions/createPost";
+import { useState, useActionState, useEffect } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
@@ -10,7 +9,9 @@ import "highlight.js/styles/github.css" // コードハイライト用のスタ�
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { createPost } from "@/lib/actions/createPost"
+import { updatePost } from "@/lib/actions/updatePost"
+import Image from "next/image"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 type EditPostFormProps = {
   post: {
@@ -29,7 +30,7 @@ export default function EditPostForm({ post }: EditPostFormProps) {
   const [title, setTitle] = useState(post.title)
   const [published, setPublished] = useState(post.published)
   const [imagePreview, setImagePreview] = useState(post.topImage)
-  const [state, formAction] = useActionState(createPost, {
+  const [state, formAction] = useActionState(updatePost, {
     success: false,
     errors: {},
   })
@@ -39,6 +40,23 @@ export default function EditPostForm({ post }: EditPostFormProps) {
     setContent(value)
     setContentLength(value.length)
   }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const previewUrl = URL.createObjectURL(file)
+      setImagePreview(previewUrl)
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview && imagePreview !== post.topImage) {
+        URL.revokeObjectURL(imagePreview)
+      }
+    }
+  }, [imagePreview, post.topImage])
+
   return (
     <div className="container mx-auto mt-10">
       <h1 className="text-2xl font-bold mb-4">記事編集（Markdown対応）</h1>
@@ -47,12 +65,24 @@ export default function EditPostForm({ post }: EditPostFormProps) {
         <input type="hidden" name="oldImageUrl" value={post.topImage || ""} />
         <div>
           <Label htmlFor="title">タイトル</Label>
-          <Input type="text" id="text" name="title" placeholder="タイトルを入力してください" value={post.title} />
+          <Input
+            type="text"
+            id="text"
+            name="title"
+            placeholder="タイトルを入力してください"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
           {state.errors.title && <p className="text-red-500 text-sm mt-1">{state.errors.title.join(",")}</p>}
         </div>
         <div>
           <Label htmlFor="topImage">トップ画像</Label>
-          <Input type="file" id="topImage" accept="image/*" name="topImage" />
+          <Input type="file" id="topImage" accept="image/*" name="topImage" onChange={handleImageChange} />
+          {imagePreview && (
+            <div className="mt-2">
+              <Image src={imagePreview} alt={post.title} width={0} height={0} sizes="200px" className="w-[200px]" priority />
+            </div>
+          )}
           {state.errors.topImage && <p className="text-red-500 text-sm mt-1">{state.errors.topImage.join(",")}</p>}
         </div>
         <div>
@@ -70,7 +100,7 @@ export default function EditPostForm({ post }: EditPostFormProps) {
         </div>
         <div className="text-right text-sm to-gray-500 mt-1">文字数：{contentLength}</div>
         <div>
-          <Button thpe="button" onClick={() => setPreview(!preview)}>
+          <Button type="button" onClick={() => setPreview(!preview)}>
             {preview ? "プレビューを閉じる" : "プレビューを表示"}
           </Button>
         </div>
@@ -80,12 +110,22 @@ export default function EditPostForm({ post }: EditPostFormProps) {
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeHighlight]}
               skipHtml={false} // HTMLスキップを無効化
-              unwrapDisalowed={true} // Markdownの改行を解釈
+              unwrapDisallowed={true} // Markdownの改行を解釈
             >
               {content}
             </ReactMarkdown>
           </div>
         )}
+        <RadioGroup value={published.toString()} name="published" onValueChange={(value) => setPublished(value === "true")}>
+          <div className="flex items-center gap-3">
+            <RadioGroupItem value="true" id="published-one" />
+            <Label htmlFor="published-one">表示</Label>
+          </div>
+          <div className="flex items-center gap-3">
+            <RadioGroupItem value="false" id="published-two" />
+            <Label htmlFor="published-one">非表示</Label>
+          </div>
+        </RadioGroup>
         <Button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
           更新する
         </Button>

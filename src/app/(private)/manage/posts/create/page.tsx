@@ -54,7 +54,7 @@ export default function CreatePage() {
         </div>
         <div className="text-right text-sm to-gray-500 mt-1">文字数：{contentLength}</div>
         <div>
-          <Button thpe="button" onClick={() => setPreview(!preview)}>
+          <Button type="button" onClick={() => setPreview(!preview)}>
             {preview ? "プレビューを閉じる" : "プレビューを表示"}
           </Button>
         </div>
@@ -64,7 +64,7 @@ export default function CreatePage() {
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeHighlight]}
               skipHtml={false} // HTMLスキップを無効化
-              unwrapDisalowed={true} // Markdownの改行を解釈
+              unwrapDisallowed={true} // Markdownの改行を解釈
             >
               {content}
             </ReactMarkdown>
